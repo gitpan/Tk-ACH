@@ -1,0 +1,10 @@
+use Tk;
+use Tk::FileEntry;
+
+my $mw = MainWindow->new();
+my $fe = $mw->FileEntry(-command => sub {
+				print join('|', 'Selected: ', @_,"\n");
+			})->pack();
+my $ex = $mw->Button(-text=>'Exit',-command=>sub{$mw->destroy})->pack();
+
+MainLoop;

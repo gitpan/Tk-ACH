@@ -1,0 +1,13 @@
+MANIFEST
+MANIFEST.SKIP
+Makefile.PL
+README
+TODO
+FcyEntry.pm
+FileEntry.pm
+ex/fileentry
+ex/fcyentry
+ptksh
+t/TESTsetup
+t/fcyentry.t
+t/fileentry.t

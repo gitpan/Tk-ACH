@@ -1,0 +1,64 @@
+# general subroutines for this test suite
+
+# $Id: TESTsetup 1.1 Wed, 26 Nov 1997 00:33:07 +0100 ach $
+
+# set test $::verbose equal
+#	1	print infos and carp on failure
+
+$| = 1;
+
+use Tk;
+use strict;
+use vars '$mw';
+use Carp;
+
+{ # start for private lexicals :-)
+
+my $counter = 0;
+my $mw;
+my $msg;
+my $bye;
+
+sub ok ($) {
+    my ($bool) = @_;
+    $mw->idletasks();
+    $counter++;
+    carp "\n" if not $bool and $::verbose;
+    print $bool ? '' : 'not ', "ok $counter\n";
+    $bool;
+}
+
+sub testarea {
+    my $num = shift;
+    print "1..$num\n";
+    $mw = MainWindow->new();
+    $mw->title($0);
+    $mw->iconname($0);
+    $mw->protocol('WM_DELETE_WINDOW' => sub {$mw->destroy});
+
+    my $work = $mw->Frame(-width=>4,-height=>4,-borderwidth=>2,-relief=>'sunken')
+	->pack(-fill=>'both', -expand=>'yes');
+
+    if (@ARGV) {
+	$msg = $mw->Entry(-width=> 20)->pack();
+	$msg->insert(0,'Running...');
+	$bye = $mw->Button(-text=>'Exit', -command=>sub{$mw->destroy})->pack;
+    }
+    $work;
+};
+
+sub testend {
+     print "# Done\n";
+     if (@ARGV) {
+         $msg->delete(0,'end');
+         $msg->insert(0,'All tests done.');
+         $bye->focus;
+         MainLoop;
+     }
+}
+
+sub testprint { print @_; }
+
+} # end of private lexicals :-)
+1;
+__END__

@@ -1,0 +1,62 @@
+
+	This is alpha software.  Use it only if you
+	know what you are doing.  Patches welcome :-)
+
+FileSelection of alpha release Tk800.003 does not work (my fault!).
+So FileEntrys FileSelction dialog will not work.  For other known
+bugs see BUGS sections in the documentation and the TODO file.
+
+
+Achim Bohnet <ach@mpe.mpg.de>
+
+
+Modules:
+
+Name           DSLI  Description                                  Info
+-------------  ----  -------------------------------------------- -----
+Tk::
+FcyEntry       bdpO  Entry with bg color depending on -state	   ACH
+FileEntry      adpO  Primitive clone of Tix FileEntry widget       ACH
+
+Scripts:
+
+Name           DSLI  Description                                  Info
+-------------  ----  -------------------------------------------- -----
+ptksh	       rdpO  pTk shell: TRL support & persistent history   ACH
+
+History:
+
+Version: 0.02 09-Apr-1998
+
+	o ptksh
+		o POD updates and markup adapted to 'perl/Tk' standard
+		o 'o' cmd extention:
+		  -  rest of 'o' line splitted with split "". So
+		     ptksh> o $w  opt1 opt2 ...    # accepts input like qw(...)
+		  -  ptksh> o $w  /regexp/         # list all option of $w
+							 matching regexp
+		o ./.ptksh_init file sourced on startup
+		o $ARGV[0] sourced on startup (please make sure there
+		  is no MainLoop otherwise ptksh will hang)
+
+	o FileEntry.pm & FcyEntry.pm
+		o minor POD corrections additions
+		o use Tk::<colname>() instead of hardcoded colors
+
+	o ex/
+		o added fcyentry example script
+
+	o Start for application widgets (not ready for public)
+		alpha/Tk/App.pm
+		alpha/Tk/App/Main.pm
+		alpha/Tk/App/Widget.pm
+		...
+
+Version: 0.01	19-Jan-1998
+
+	o ptksh: added utility functions p, u, o to ptksh
+
+	o FileEntry:  Creation of FileSelect is delayed until
+	              it's really needed.
+
+
