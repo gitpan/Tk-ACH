@@ -1,6 +1,6 @@
 #!perl -w
 #
-# $Id: ptksh 1.6 Wed, 08 Apr 1998 23:49:13 +0200 ach $
+# $Id: ptktrl 1.9 Mon, 06 Jul 1998 20:44:48 +0200 ach $
 #
 # POD documentation after __END__
 
@@ -8,12 +8,12 @@ require 5.004;
 $| = 1;
 use strict;
 use vars '$VERSION';
-$VERSION = substr q$Revision: 1.6 $, 10;
+$VERSION = substr q$Revision: 1.9 $, 10;
 
 use Tk;
 use Term::ReadLine;
 use vars qw($mw);
-my $name = 'ptksh';
+my $name = 'ptktrl';
 $mw = MainWindow->new;
 $mw->geometry('+20+20');
 
@@ -25,10 +25,10 @@ print "\n\t\@INC:\n";
 foreach (@INC) { print "\t  $_\n" };
 print "\n";
 
-if ( -r '.ptkshinit')
+if ( -r ".${name}_init")
   {
-    print "Reading .ptksh_init ...\n";
-    do '.ptkshinit';
+    print "Reading .${name}_init ...\n";
+    do ".${name}_init";
   }
 
 if (defined($ARGV[0]) && -r $ARGV[0])
@@ -77,7 +77,11 @@ if ( -r $histfile and open(HIST, "<$histfile") ) {
 sub ptksh::_o
   {
     my $w = shift;
-    my (@opt) = split " ", $_[0];
+    my $what = shift;
+
+    $what =~ s/^\s+//;
+    $what =~ s/\s+$//;
+    my (@opt) = split " ", $what;
 
     require Tk::Pretty;
 
@@ -100,9 +104,9 @@ sub ptksh::_o
 	s/['"]$//;
 	s/^([^-])/-$1/;
       }
-    if (@_)
+    if (length $what)
       {
-	foreach (@_)
+	foreach (@opt)
           {
             print Tk::Pretty::Pretty($w->configure($_)),"\n";
           }
@@ -166,7 +170,7 @@ sub ptksh::_h
   u xxx              xxx = string : load Tk::Xxx
 			    = ''     : list all modules loaded
 			    = undef  : list modules loaded since last u call
-				       (or after ptksh startup)
+				       (or after ptktrl startup)
 
 EOT
   }
@@ -189,7 +193,8 @@ LINE: while ( defined($line = $term->readline("$name> ")) ) {
 	last if s/^d\s+/ptksh::_d /;
 	last if s/^u\s+(\S+)/ptksh::_u('$1')/;
 	last if s/^p\s+(.*)$/ptksh::_p $1;/;
-	last if s/^o\s+(\S+)\s*,?\s+(.*)$/ptksh::_o $1, '$2';/;
+	last if s/^o\s+(\S+)\s*?$/ptksh::_o $1;/;
+	last if s/^o\s+(\S+)\s*,?\s+(.*)?$/ptksh::_o $1, '$2';/;
     }
     #print "Line: ($line)\n";
     use strict;  # so 'strict is loaded
@@ -232,47 +237,47 @@ __END__
 
 =head1 NAME
 
-ptksh - Simple perl/Tk shell with cmd line editing and a persistent history
+ptktrl - Simple perl/Tk shell with cmd line editing and a persistent history
 
 
 =head1 SYNOPSIS
 
-  % ptksh  ?I<scriptfile>?
+  % ptktrl  ?I<scriptfile>?
   ... version informations ...
-  ptksh> $b=$mw->Button(-text=>'Hi',-command=>sub{print 'Hi'})
-  ptksh> $b->grid
-  ptksh> o $b
+  ptktrl> $b=$mw->Button(-text=>'Hi',-command=>sub{print 'Hi'})
+  ptktrl> $b->grid
+  ptktrl> o $b
   ... list of options ...
-  ptksh> ...
-  ptksh> ^D
+  ptktrl> ...
+  ptktrl> ^D
   %
 
 
 =head1 DESCRIPTION
 
-ptksh is a simple perl/Tk shell to enter perl commands
-interactively.  When one starts ptksh a L<MainWindow|Tk::MainWindow>
+ptktrl is a simple perl/Tk shell to enter perl commands
+interactively.  When one starts ptktrl a L<MainWindow|Tk::MainWindow>
 is automaticly created. One can access it with I<$mw> on the command line.
 
-ptksh supports command line editing and history via ReadLine interface
+ptktrl supports command line editing and history via ReadLine interface
 (see L<Term::ReadLine>).  The last 50 commands entered are saved on
-exit to F<~/.ptksh_history>.  The history file is loaded into history
-cache the next time you start ptksh. 
+exit to F<~/.ptktrl_history>.  The history file is loaded into history
+cache the next time you start ptktrl. 
 
-To exit ptksh use: C<^D, exit,>  or C<quit>.
+To exit ptktrl use: C<^D, exit,>  or C<quit>.
 
-The primary target of ptksh is to experiment with perl/Tk
+The primary target of ptktrl is to experiment with perl/Tk
 widgets.  To debug perl/Tk programs use the more powerful the
 L<perl debugger|perldebug>.  Just enter ``O tk'' on debuggers
 command line to start the Tk eventloop.  The only advantage
-ptksh has is that history file support and that
+ptktrl has is that history file support and that
 a MainWindow is automaticly created.
 
 
 =head1 DEBUGGING SUPPORT
 
-ptksh provides some convenience function to make browsing
-in perl/Tk widget easier:
+ptktrl provides some convenience function to make browsing
+in perl/Tk widgets easier:
 
 =over 4
 
@@ -308,7 +313,7 @@ by the commands you executed or since the last time you
 called C<u>.
 
 If argument is the empty string lists all modules that are
-loaded by ptksh.
+loaded by ptktrl.
 
 If argument is a string, ``text'' it tried does a ``use Tk::Text''.
 
@@ -323,27 +328,29 @@ L<perlrun/"ENVIRONMENT"> for further details.
 
 =over 4
 
-=item F<.ptksh_init>
+=item F<.ptktrl_init>
 
 If found in current directory it is read in an evaluated
-after the mainwindow I<$mw> is created. F<.ptksh_init>
+after the mainwindow I<$mw> is created. F<.ptktrl_init>
 can contain any valid perl code.
 
-=item F<~/.ptksh_history>
+=item F<~/.ptktrl_history>
 
-Contains the last 50 lines entered in ptksh session(s).
+Contains the last 50 lines entered in ptktrl session(s).
 
 =back
 
 
 =head1 BUGS
 
+Work only on Unix systems.
+
 Term::Readline::Perl command line history is broken when used
 in conjunction with perl/Tk.  Term::ReadLine::Gnu has no
 problems.
 
 B<Tk::MainLoop> function interactively entered or sourced in a
-init or script file will block ptksh.
+init or script file will block ptktrl.
 
 
 =head1 SEE ALSO

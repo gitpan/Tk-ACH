@@ -2,15 +2,11 @@
 	This is alpha software.  Use it only if you
 	know what you are doing.  Patches welcome :-)
 
-FileSelection of alpha release Tk800.003 does not work (my fault!).
-So FileEntrys FileSelction dialog will not work.  For other known
-bugs see BUGS sections in the documentation and the TODO file.
-
-
 Achim Bohnet <ach@mpe.mpg.de>
 
 
-Modules:
+Modules
+=======
 
 Name           DSLI  Description                                  Info
 -------------  ----  -------------------------------------------- -----
@@ -22,9 +18,25 @@ Scripts:
 
 Name           DSLI  Description                                  Info
 -------------  ----  -------------------------------------------- -----
-ptksh	       rdpO  pTk shell: TRL support & persistent history   ACH
+ptktrl	       rdpO  pTk shell: TRL support & persistent history   ACH
 
-History:
+Note:
+	o ptktrl does only work on Unix systems.
+	o ptktrl works best with Term::ReadLine::GNU.
+
+History
+=======
+
+Version: 0.03
+
+	o ptksh renamed to ptktrl.  There is now a better ptksh
+	  available in Tk > V800.006.  ptktrl has the (only)
+	  advantage that one can has on vi-editing mode when
+	  Term::ReadLine::Gnu is installed.
+
+	o Added t/basic.t tests: derived from Tk800 t/create.t
+
+	o make 'o' command work as documented
 
 Version: 0.02 09-Apr-1998
 

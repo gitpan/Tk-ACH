@@ -1,18 +1,5 @@
 use ExtUtils::MakeMaker;
 
-require Tk;
-if ($Tk::VERSION eq '800.003')
-  {
-    print <<EOT;
-
-	Uppps you're using the alpha release Tk V$Tk::VERSION: 
-	FileSelection of this perl/Tk release does not work
-	(my fault!).  So FileEntrys FileSelction dialog will also
-	not work.
-
-EOT
-  }
-
 WriteMakefile(
 	PREREQ_PM	=> {
 			     ExtUtils::MakeMaker => '5.41',   # for #! fixing
@@ -21,11 +8,14 @@ WriteMakefile(
 
 	DISTNAME	=> 'Tk-ACH',
         NAME		=> 'Tk::ACH',
-	VERSION		=> '0.02',
+	VERSION		=> '0.03',
 
 	DIR		=> [],
-	EXE_FILES	=> [ 'ptksh' ],
+	EXE_FILES	=> [ 'ptktrl' ],
 
 	linkext		=> { LINKTYPE => '' },
 	dist		=> { COMPRESS => 'gzip -9f', SUFFIX => 'gz'},
 );
+
+__END__
+
