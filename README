@@ -2,8 +2,8 @@
 	This is alpha software.  Use it only if you
 	know what you are doing.  Patches welcome :-)
 
-Achim Bohnet <ach@mpe.mpg.de>
-
+Author: Achim Bohnet <ach@mpe.mpg.de>
+Maintainer: Ye Wenbin <wenbinye@gmail.com>
 
 Modules
 =======
@@ -26,6 +26,9 @@ Note:
 
 History
 =======
+
+Version: 0.04 08-Mar-2008
+    o ptktrl shows eval result after sending input.
 
 Version: 0.03
 

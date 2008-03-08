@@ -115,6 +115,7 @@ sub ptksh::_o
       {
         foreach ($w->configure()) { print Tk::Pretty::Pretty($_),"\n" }
       }
+    return;
   }
 
 sub ptksh::_p {
@@ -150,12 +151,14 @@ sub ptksh::_u {
 	print STDERR "No modules loaded since last 'u' command (or startup)\n"
 		unless $u_cnt;
     }
+    return;
 }
 
 sub ptksh::_d
   {
     require Data::Dumper;
     print Data::Dumper::Dumper(@_);
+    return;
   }
 
 sub ptksh::_h
@@ -173,6 +176,7 @@ sub ptksh::_h
 				       (or after ptktrl startup)
 
 EOT
+    return;
   }
 	
 ###
@@ -199,9 +203,13 @@ LINE: while ( defined($line = $term->readline("$name> ")) ) {
     #print "Line: ($line)\n";
     use strict;  # so 'strict is loaded
     %u_last = %INC unless $u_init++;
-    eval "{no strict; local \$^W=0; $line;}";
-    print "$@\n" if $@;
-
+    my $result = eval "{no strict; local \$^W=0; $line;}";
+    if ($@) {
+        print "$@\n";
+    }
+    elsif ($result) {
+        print $result, "\n";
+    }
 }
 print "\n" unless defined $line;
 

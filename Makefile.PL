@@ -8,7 +8,7 @@ WriteMakefile(
 
 	DISTNAME	=> 'Tk-ACH',
         NAME		=> 'Tk::ACH',
-	VERSION		=> '0.03',
+	VERSION		=> '0.04',
 
 	DIR		=> [],
 	EXE_FILES	=> [ 'ptktrl' ],
